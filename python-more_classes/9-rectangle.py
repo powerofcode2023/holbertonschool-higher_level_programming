@@ -81,6 +81,7 @@ class Rectangle:
         if rect_1.area == rect_2.area:
             return rect_1
 
+    @classmethod
     def square(cls, size=0):
         """ return a new rectangle """
         return cls(size, size)
