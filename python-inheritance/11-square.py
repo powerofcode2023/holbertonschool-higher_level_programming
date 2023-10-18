@@ -18,4 +18,4 @@ class Square(Rectangle):
 
     def __str__(self):
         """string representation of Square"""
-        return '[Square] {}/{}'.format(self.__size, self.__size)i
+        return '[Square] {}/{}'.format(self.__size, self.__size)
