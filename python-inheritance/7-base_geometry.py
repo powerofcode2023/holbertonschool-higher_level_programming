@@ -1,4 +1,4 @@
-i#!/usr/bin/python3
+#!/usr/bin/python3
 """define class BaseGeomtry"""
 
 
@@ -9,6 +9,7 @@ class BaseGeometry:
 
     def integer_validator(self, name, value):
         """validate integer"""
+
         if not type(value) is int:
             raise TypeError("{} must be an integer".format(name))
         if value <= 0:
