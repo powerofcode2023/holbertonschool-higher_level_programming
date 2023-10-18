@@ -1,3 +1,14 @@
+The ``7-base_geometry`` module
+============================
+This module contains a custom class of BaseGeometry, which has 2 methods: area(), and ``integer_validator``.
+
+Using ``BaseGeometry``
+---------------------
+
+First import
+~~~~~~~~~~~
+First import ``BaseGeometry`` from the ``7-base_geometry`` module. Since the file name contains a numeral, you can't use the simple ``from 7-base_geometry import BaseGeometry``. You can instead use the following syntax:
+
     >>> BaseGeometry = __import__('7-base_geometry').BaseGeometry
 
 Normal use
