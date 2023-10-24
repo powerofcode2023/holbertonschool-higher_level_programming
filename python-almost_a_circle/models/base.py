@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """define Base class"""
 
+
 class Base:
     """manage id attribute for classes"""
     __nb_objects = 0
