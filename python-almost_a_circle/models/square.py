@@ -26,3 +26,14 @@ class Square(Rectangle):
         """ String representation of the Square instance """
         return ("[Square] ({}) {}/{} - {}"
                 .format(self.id, self.x, self.y, self.width))
+
+    def update(self, *args, **kwargs):
+        """ Assigns attributes based on *args and **kwargs """
+        if args and len(args) > 0:
+            attributes = ["id", "size", "x", "y"]
+            for attribute, value in zip(attributes, args):
+                setattr(self, attribute, value)
+        elif kwargs:
+            for key, value in kwargs.items():
+                if hasattr(self, key):
+                    setattr(self, key, value)
