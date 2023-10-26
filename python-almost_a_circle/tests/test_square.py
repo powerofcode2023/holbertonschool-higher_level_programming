@@ -21,7 +21,7 @@ class test_square(unittest.TestCase):
         """Deleting created instance"""
         try:
             os.remove("Square.json")
-        except:
+        except FileNotFoundError:
             pass
         del self.s
 
@@ -211,7 +211,7 @@ class test_square(unittest.TestCase):
         """Testing saving a file into json format"""
         try:
             os.remove("Square.json")
-        except:
+        except FileNotFoundError:
             pass
         r1 = Square(5, 0, 0, 346)
         Square.save_to_file([r1])
@@ -229,7 +229,7 @@ class test_square(unittest.TestCase):
         """Testing saving a file into json format sending None"""
         try:
             os.remove("Square.json")
-        except:
+        except FileNotFoundError:
             pass
         r1 = Square(5, 0, 0, 346)
         Square.save_to_file(None)
@@ -243,7 +243,7 @@ class test_square(unittest.TestCase):
         """Testing saving a file into json format and testing the type"""
         try:
             os.remove("Square.json")
-        except:
+        except FileNotFoundError:
             pass
         r1 = Square(5, 0, 0, 346)
         Square.save_to_file([r1])
@@ -252,7 +252,7 @@ class test_square(unittest.TestCase):
         self.assertEqual(str, type(content))
         try:
             os.remove("Square.json")
-        except:
+        except FileNotFoundError:
             pass
 
     def test_json_string_type(self):
