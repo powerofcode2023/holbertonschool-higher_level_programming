@@ -1,89 +1,80 @@
 #!/usr/bin/python3
-import unittest, json
+"""Unit test for the Base class"""
+
+import unittest
+import os
 from models.base import Base
-from models.rectangle import Rectangle
-from models.square import Square
+import json
 
-class TestBaseClass(unittest.TestCase):
 
-    def test_auto_id_increment(self):
-        """Test automatic ID incrementation."""
+class TestBase(unittest.TestCase):
+    """TestBase class to run tests"""
+
+    def setUp(self):
+        """Set up for each test method."""
+        Base._Base__nb_objects = 0
+
+    def tearDown(self):
+        """Tear down for each test method."""
+        try:
+            os.remove("Base.json")
+            os.remove("Rectangle.json")
+            os.remove("Square.json")
+        except FileNotFoundError:
+            pass
+
+    def test_id(self):
+        """Test for id."""
         b1 = Base()
-        self.assertEqual(b1.id, 1)
-
         b2 = Base()
+        b3 = Base(12)
+        self.assertEqual(b1.id, 1)
         self.assertEqual(b2.id, 2)
+        self.assertEqual(b3.id, 12)
 
-    def test_id_with_value(self):
-        """Test explicit ID value."""
-        b3 = Base(150)
-        self.assertEqual(b3.id, 150)
+    def test_to_json_string(self):
+        """Test for `to_json_string` method."""
+        self.assertEqual(Base.to_json_string(None), "[]")
+        self.assertEqual(Base.to_json_string([]), "[]")
+        d = {"id": 12, "x": 0, "y": 0, "width": 3, "height": 4}
+        json_str = Base.to_json_string([d])
+        self.assertTrue(type(json_str) is str)
+        self.assertEqual(json.loads(json_str), [d])
 
-    def test_id_increment_after_value(self):
-        """Test ID incrementation after explicit value."""
-        b4 = Base()
-        self.assertEqual(b4.id, 3)
+    def test_from_json_string(self):
+        """Test for `from_json_string` method."""
+        self.assertEqual(Base.from_json_string(None), [])
+        self.assertEqual(Base.from_json_string(""), [])
+        d = {"id": 12, "x": 0, "y": 0, "width": 3, "height": 4}
+        json_str = json.dumps([d])
+        self.assertEqual(Base.from_json_string(json_str), [d])
 
-    def test_id_valid(self):
-        """Testing a valid id."""
-        b = Base(45)
-        self.assertEqual(b.id, 45)
+    def test_save_to_file(self):
+        """Test save_to_file method."""
+        r = Base(3)
+        Base.save_to_file([r])
 
-    def test_id_at_zero(self):
-        """Testing an ID at zero."""
-        b = Base(0)
-        self.assertEqual(b.id, 0)
+        with open("Base.json", "r") as file:
+            self.assertEqual([r.to_dictionary()], json.load(file))
 
-    def test_id_negative_value(self):
-        """Testing a negative id."""
-        b = Base(-15)
-        self.assertEqual(b.id, -15)
+    def test_create(self):
+        """Test create method."""
+        r = Base(3)
+        r_dict = r.to_dictionary()
+        r2 = Base.create(**r_dict)
+        self.assertEqual(r.id, r2.id)
+        self.assertNotEqual(r, r2)
 
-    def test_id_as_string(self):
-        """Testing ID as string."""
-        b = Base("John")
-        self.assertEqual(b.id, "John")
+    def test_load_from_file(self):
+        """Test load_from_file method."""
+        r = Base(3)
+        Base.save_to_file([r])
 
-    def test_id_as_list(self):
-        """Testing ID as list."""
-        b = Base([2, 4, 6])
-        self.assertEqual(b.id, [2, 4, 6])
-
-    def test_id_as_dict(self):
-        """Testing ID as dictionary."""
-        b = Base({"id": 95})
-        self.assertEqual(b.id, {"id": 95})
-
-    def test_id_as_tuple(self):
-        """Testing ID as tuple."""
-        b = Base((5,))
-        self.assertEqual(b.id, (5,))
-
-    def test_json_conversion_type(self):
-        """Testing JSON conversion type."""
-        sq = Square(2)
-        json_dict = sq.to_dictionary()
-        json_string = Base.to_json_string([json_dict])
-        self.assertEqual(type(json_string), str)
-
-    def test_json_conversion_value(self):
-        """Testing JSON conversion value."""
-        sq = Square(2, 0, 0, 405)
-        json_dict = sq.to_dictionary()
-        json_string = Base.to_json_string([json_dict])
-        self.assertEqual(json.loads(json_string), [{"id": 405, "y": 0, "size": 2, "x": 0}])
-
-    def test_json_conversion_with_None(self):
-        """Testing JSON conversion with None."""
-        json_string = Base.to_json_string(None)
-        self.assertEqual(json_string, "[]")
-
-    def test_json_conversion_with_empty_list(self):
-        """Testing JSON conversion with an empty list."""
-        json_string = Base.to_json_string([])
-        self.assertEqual(json_string, "[]")
+        bases = Base.load_from_file()
+        self.assertIsInstance(bases, list)
+        self.assertIsInstance(bases[0], Base)
+        self.assertEqual(bases[0].id, 3)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-
