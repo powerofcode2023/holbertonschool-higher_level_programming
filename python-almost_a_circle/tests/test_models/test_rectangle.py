@@ -7,6 +7,10 @@ from models.square import Square
 class TestBaseClass(unittest.TestCase):
     """Class to test Base class functionality"""
 
+    def setUp(self):
+        """Reset the class counter before each test"""
+        Base._Base__nb_objects = 0
+
     def test_no_id_given(self):
         """Test without providing an id"""
         instance = Base()
